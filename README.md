@@ -30,7 +30,7 @@ Centos 没验证过,后面看是否能用,如果不能用再做支持</br>
     编辑定时任务
     crontab -e
     添加要执行的脚本
-    0 */6 * * * python /{file_path}/linux_tool_scripts/fab -f disk_check.py check_disk &    # 每隔6小时执行一次
+    0 */6 * * *  fab -f /{file_path}/linux_tool_scripts/disk_check.py check_disk &    # 每隔6小时执行一次disk_check.py
     运行定时任务
     sudo /etc/init.d/cron restart
     查看定时任务列表
