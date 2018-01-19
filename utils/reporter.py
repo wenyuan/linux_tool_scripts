@@ -13,13 +13,14 @@ class Reporter(object):
         self.sender = 'sender@163.com'
         self.username = 'sender@163.com'
         self.password = 'password'
-        self.receiver = ['receiver1@163.com', 'receiver2@163.com', 'receiver3@163.com']
+        self.receiver = 'receiver1@163.com,receiver2@163.com,receiver3@163.com'
         self.smtp_server = 'smtp.163.com'
 
     def send_email(self, subject, detail):
         msg = MIMEText(detail, 'plain', 'utf-8')    # 中文需参数‘utf-8’，单字节字符不需要
         msg['From'] = self._format_addr(u'Monitor汇报人 <%s>' % self.sender)
-        msg['To'] = self._format_addr(u'开发团队 <%s>' % self.receiver)
+        # msg['To'] = self._format_addr(u'开发团队 <%s>' % self.receiver)    #todo...这种写法收到的邮件只显示第一个人的信息,待研究
+        msg['To'] = self.receiver
         msg['Subject'] = Header(subject, 'utf-8').encode()
 
         smtp = smtplib.SMTP()

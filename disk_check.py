@@ -21,7 +21,7 @@ else:
         'xwy2@192.168.10.2:22': 'xwy2'
     }
 
-disk_check_cmd = 'df -hk'
+disk_check_cmd = 'df -ah'
 
 email_title = u'北京磁盘容量告警'
 # ---------------------参数配置区---------------------
@@ -33,8 +33,9 @@ def check_disk():
     result = sudo(disk_check_cmd)
     for line in result.splitlines()[1:]:
         row = line.split()
-        fs, total, used, avail, used_percent, mounted_on = row[0], int(row[1]), int(row[2]), int(row[3]), row[4], row[5]
-        if total > 1024 and used > total*0.7:
+        fs, total, used, avail, used_percent, mounted_on = row[0], row[1], row[2], row[3], row[4], row[5]
+        used_percent = float(used_percent.strip("%")) / 100
+        if used_percent > 0.7:
             send_email(current_ip, result)
             break
 
