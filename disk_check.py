@@ -32,12 +32,19 @@ def check_disk():
     current_ip = env.host
     result = sudo(disk_check_cmd)
     for line in result.splitlines()[1:]:
-        row = line.split()
-        fs, total, used, avail, used_percent, mounted_on = row[0], row[1], row[2], row[3], row[4], row[5]
-        used_percent = float(used_percent.strip("%")) / 100
-        if used_percent > 0.7:
-            send_email(current_ip, result)
-            break
+        try:
+            row = line.split()
+            if not row:
+                continue
+            fs, total, used, avail, used_percent, mounted_on = row[0], row[1], row[2], row[3], row[4], row[5]
+            if used_percent in ['-']:
+                continue
+            used_percent = float(used_percent.strip("%")) / 100
+            if used_percent > 0.7:
+                send_email(current_ip, result)
+                break
+        except Exception as e:
+            print(e)
 
 
 def send_email(current_ip, result):
